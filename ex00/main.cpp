@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:52:36 by maneddam          #+#    #+#             */
-/*   Updated: 2023/11/19 15:25:41 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/11/19 16:07:57 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int ac, char **av)
 {
-    std::map<unsigned long, unsigned int> mydb;
+    std::map<unsigned long, double> mydb;
     try
     {
         if (ac == 2)
