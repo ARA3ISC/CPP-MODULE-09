@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/11/20 14:02:40 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/11/20 14:28:01 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ bool parseDate(std::string toCheck, int field)
 	char *end;
 	double data;
 	data = std::strtod(toCheck.c_str(), &end);
-	// if ()
+	if (field != 3)
+	{
+		if (toCheck.find('.') != std::string::npos)
+			return true;
+	}
 	// std::cout << "[" << toCheck << "]" << std::endl;
 	// exit(0);
 	switch (field)
@@ -101,9 +105,7 @@ void parseLine(std::string line)
 	{
 		retireveData(line, year, month, day, value);
 
-		// std::cout << "[" <<  year << "]"<< std::endl;
 
-		// if (parseDate(year, 0) || parseDate(month, 1) || parseDate(day, 2) || parseDate(value, 3))
 		if (parseDate(year, 0) || parseDate(month, 1) || parseDate(day, 2) || parseDate(value, 3))
 			std::cout << "Error: bad input => " << line << std::endl;
 		else
