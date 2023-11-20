@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:52:36 by maneddam          #+#    #+#             */
-/*   Updated: 2023/11/20 14:18:55 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:33:40 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int ac, char **av)
         {
             // (void)av;
             loadData(mydb);
-            parseTheFile(av[1]);
+            parseTheFile(av[1], mydb);
         }
         else
             std::cout << "Error: could not open file." << std::endl;

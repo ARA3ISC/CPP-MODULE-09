@@ -6,13 +6,13 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/11/20 14:28:01 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:39:47 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
-void retireveData(std::string line, std::string& y, std::string& m, std::string& d, std::string& v)
+void retrieveData(std::string line, std::string& y, std::string& m, std::string& d, std::string& v)
 {
 	int i = 0;
 	int dashes = 0;
@@ -41,57 +41,73 @@ void retireveData(std::string line, std::string& y, std::string& m, std::string&
 bool countPipesDashes(std::string line)
 {
 	int pipes = 0;
-	int dashes = 0;
 
 	pipes = std::count(line.begin(), line.end(), '|');
-	dashes = std::count(line.begin(), line.end(), '-');
-	if (pipes != 1 || dashes != 2)
+	// dashes = std::count(line.begin(), line.end(), '-');
+	if (pipes != 1)
 		return true;
 	return false;
 }
 
-bool parseDate(std::string toCheck, int field)
+void parseDate(std::string toCheck, int field)
 {
 	char *end;
 	double data;
 	data = std::strtod(toCheck.c_str(), &end);
 	if (field != 3)
-	{
 		if (toCheck.find('.') != std::string::npos)
-			return true;
-	}
-	// std::cout << "[" << toCheck << "]" << std::endl;
-	// exit(0);
+			throw 1;
 	switch (field)
 	{
-	case 0:
-		if (*end || data > 2022 || data < 2009)
-			return true;
-		break;
-	case 1:
-		if (*end || data > 12 || data <= 0)
-			return true;
-		break;
-	case 2:
-		if (*end || data > 31 || data <= 0)
-		{
-			return true;
-		}
-		break;
-	case 3:
-		if (*end || data > 1000 || data < 0)
-		{
-			// std::cout << "***\n";
-
-			return true;
-		}
-		break;
+		case 0:
+			if (*end || data > 2022 || data < 2009)
+				throw 1;
+			break;
+		case 1:
+			if (*end || data > 12 || data <= 0)
+				throw 1;
+			break;
+		case 2:
+			if (*end || data > 31 || data <= 0)
+				throw 1;
+			break;
+		case 3:
+			if (*end || data > 1000 || data < 0)
+			{
+				if (data < 0)
+					throw -1;
+				else if (data > 100)
+					throw 999;
+				throw 1;
+			}
+			break;
 	}
-
-	return false;
 }
 
-void parseLine(std::string line)
+void beginCalculation(std::string year, std::string month, std::string day, std::string value, std::map<unsigned long, double>& mydb)
+{
+	char *end1;
+	char *end2;
+	std::string key = year + month + day;
+	double k = std::strtod(key.c_str(), &end1);
+	double v = std::strtod(value.c_str(), &end2);
+
+
+	if (mydb.find(k) != mydb.end())
+	{
+		float result = mydb.at(k) * v;
+		std::cout << year << "-" << month << "-" << day << " => " << v << " = " << result << std::endl;
+	}
+	else
+	{
+		std::map<unsigned long, double>::iterator it = mydb.lower_bound(k);
+		it--;
+		std::cout << year << "-" << month << "-" << day << " => " << v << " = " << it->second * v << std::endl;
+	}
+}
+
+
+void parseLine(std::string line, std::map<unsigned long, double>& mydb)
 {
 	std::string year;
 	std::string month;
@@ -100,22 +116,31 @@ void parseLine(std::string line)
 	if (line.empty())
 		return ;
 	if (countPipesDashes(line))
-		std::cout << "Error: bad input => " << line << std::endl;
+		std::cout << RED << "Error: bad input => "<< RESET << line  << std::endl;
 	else
 	{
-		retireveData(line, year, month, day, value);
-
-
-		if (parseDate(year, 0) || parseDate(month, 1) || parseDate(day, 2) || parseDate(value, 3))
-			std::cout << "Error: bad input => " << line << std::endl;
-		else
-			std::cout << line << std::endl;
-
-		// std::cout << year << "-" << month << "-" << day  << value << std::endl;
+		retrieveData(line, year, month, day, value);
+		try
+		{
+			parseDate(year, 0);
+			parseDate(month, 1);
+			parseDate(day, 2);
+			parseDate(value, 3);
+			beginCalculation(year, month, day, value, mydb);
+		}
+		catch(int e)
+		{
+			if (e == -1)
+				std::cerr << RED << "Error: not a positive number." << RESET << std::endl;
+			else if (e == 1)
+				std::cerr << RED << "Error: bad input => " << RESET << line << std::endl;
+			else
+				std::cerr << RED << "Error: too large number." << RESET << std::endl;
+		}
 	}
 }
 
-void parseTheFile(std::string toOpen)
+void parseTheFile(std::string toOpen, std::map<unsigned long, double>& mydb)
 {
 	std::fstream obj;
 	std::string line;
@@ -135,7 +160,7 @@ void parseTheFile(std::string toOpen)
 			{
 				if (getline(obj, line).eof())
 					break;
-				parseLine(line);
+				parseLine(line, mydb);
 			}
 		}
 	}
@@ -154,7 +179,6 @@ void insertLineIntoDB(std::string year, std::string month, std::string day, std:
 	v1 = std::strtod(key.c_str(), &end);
 	v2 = std::strtod(value.c_str(), &end1);
 
-
 	mydb.insert(std::pair<unsigned long, double>(static_cast<unsigned long>(v1), v2));
 
 }
@@ -166,7 +190,7 @@ void insertIntoDB(std::map<unsigned long, double>& mydb, std::string line)
 	std::string day;
 	std::string value;
 
-	retireveData(line, year, month, day, value);
+	retrieveData(line, year, month, day, value);
 	insertLineIntoDB(year, month, day, value, mydb);
 }
 
