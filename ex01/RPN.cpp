@@ -14,22 +14,24 @@
 
 void calculate(std::stack<int>& myStack, char op)
 {
-	(void)myStack;
-	switch (static_cast<int>(op))
-	{
-	case MULT:
-		std::cout << "mult\n";
-		break;
-	case PLUS:
-		std::cout << "plus\n";
-		break;
-	case SUBS:
-		std::cout << "minus\n";
-		break;
-	case DIV:
-		std::cout << "div\n";
-		break;
-	}
+	int last;
+	int b_last;
+	int result;
+
+	last = myStack.top();
+	myStack.pop();
+	b_last = myStack.top();
+	myStack.pop();
+	if (op == '*')
+		result = b_last * last;
+	else if (op == '+')
+		result = b_last + last;
+	else if (op == '/')
+		result = b_last / last;
+	else if (op == '-')
+		result = b_last - last;
+
+	myStack.push(result);
 }
 
 void startManupliationg(std::string exp)
@@ -49,19 +51,23 @@ void startManupliationg(std::string exp)
 		if (std::isdigit(exp[i]))
 			myStack.push(static_cast<int>(std::strtod(&exp[i], &end)));
 		if ((exp[i] == '*' || exp[i] == '+' || exp[i] == '/' || exp[i] == '-') && myStack.size() == 1)
-			std::cout << "Error\n";
+			throw std::runtime_error("Error");
 		else if (exp[i] == '*' || exp[i] == '+' || exp[i] == '/' || exp[i] == '-')
 			calculate(myStack, exp[i]);
-
 		i++;
 	}
+		// throw std::runtime_error("Error");
+	if (myStack.size() != 1)
+		std::cout << "Error\n";
+	else
+		std::cout << "result : " << myStack.top() << std::endl;
 
-	// std::cout << "Stack\n";
-	// while (!myStack.empty())
-	// {
-	// 	std::cout << myStack.top() << std::endl;
-	// 	myStack.pop();
-	// }
+	std::cout << "Stack\n";
+	while (!myStack.empty())
+	{
+		std::cout << myStack.top() << std::endl;
+		myStack.pop();
+	}
 
 
 }
