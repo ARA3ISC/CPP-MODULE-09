@@ -33,7 +33,6 @@ int main(int ac, char **av)
 		// load(av, d);
 		// sorting();
 
-
 		// ? print container elements before sorting
 		std::cout << "after:  ";
 		printContainer(v);
