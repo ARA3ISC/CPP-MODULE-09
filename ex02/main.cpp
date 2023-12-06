@@ -12,6 +12,7 @@
 
 #include "PmergeMe.hpp"
 
+
 int main(int ac, char **av)
 {
 	std::vector<long int> v;
@@ -22,15 +23,20 @@ int main(int ac, char **av)
 			throw std::invalid_argument("Error: Invalid arguments");
 		parseArguments(av);
 		load(av, v);
+
+		// ? print container elements before sorting
+		std::cout << "before: ";
+		printContainer(v);
+
+
 		sorting(v);
 		// load(av, d);
 		// sorting();
 
 
-		// ? print container elements
-		std::cout << "vector :\n";
-		for (typename std::vector<long int>::iterator it = v.begin(); it != v.end() ; it++)
-			std::cout << *it << " ";
+		// ? print container elements before sorting
+		std::cout << "after:  ";
+		printContainer(v);
 	}
 	catch(const std::exception& e)
 	{

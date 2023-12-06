@@ -11,6 +11,18 @@
 
 void parseArguments(char **av);
 
+template <typename F>
+void printContainer(F& container)
+{
+	typename F::iterator it;
+	for (it = container.begin(); it != container.end(); it++)
+	{
+		std::cout << *it << "  ";
+	}
+	std::cout << std::endl;
+}
+
+
 template <typename T>
 void load(char **av, T& container)
 {
@@ -38,19 +50,33 @@ void merge(T& leftContainer, T& rightContainer, T& container)
 	int l = 0;
 	int r = 0;
 
+	// container.clear();
 	while (l < leftsize && r < rightsize)
 	{
 		if (leftContainer[l] < rightContainer[r])
 		{
-			container.push_back(leftContainer[l]);
+			container[i] = leftContainer[l];
 			l++;
 		}
 		else
 		{
-			container.push_back(rightContainer[r]);
+			container[i] = rightContainer[r];
 			r++;
 		}
 		i++;
+	}
+
+	while (l < leftsize)
+	{
+		container[i] = leftContainer[l];
+		i++;
+		l++;
+	}
+	while (r < rightsize)
+	{
+		container[i] = rightContainer[r];
+		i++;
+		r++;
 	}
 }
 
@@ -72,24 +98,8 @@ void sorting(T& container)
 	for (; half < size; half++)
 		rightContainer.push_back(container[half]);
 
-
-
-	// ? print container elements
-	// int size = leftContainer.size();
-	// std::cout << "left : ";
-	// for (i = 0; i < size; ++i)
-	// 	std::cout << leftContainer[i] << " ";
-
-	// std::cout << "\nright : ";
-	//  size = rightContainer.size();
-	// for (i = 0; i < size; ++i)
-	// 	std::cout << rightContainer[i] <<  " ";
-	// std::cout << "\n";
-
-
 	sorting(leftContainer);
 	sorting(rightContainer);
 
 	merge(leftContainer, rightContainer, container);
-
 }

@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/11/20 16:39:47 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/12/05 18:09:47 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void retrieveData(std::string line, std::string& y, std::string& m, std::string&
 		i++;
 	}
 
-	// std::cout << line[i] << std::endl;
 	while (line[i])
 		v += line[++i];
 }
