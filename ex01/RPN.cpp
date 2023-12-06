@@ -56,18 +56,8 @@ void startManupliationg(std::string exp)
 			calculate(myStack, exp[i]);
 		i++;
 	}
-		// throw std::runtime_error("Error");
 	if (myStack.size() != 1)
 		std::cout << "Error\n";
 	else
 		std::cout << "result : " << myStack.top() << std::endl;
-
-	std::cout << "Stack\n";
-	while (!myStack.empty())
-	{
-		std::cout << myStack.top() << std::endl;
-		myStack.pop();
-	}
-
-
 }

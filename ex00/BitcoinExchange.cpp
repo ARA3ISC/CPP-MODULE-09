@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/12/05 18:09:47 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/12/06 17:09:41 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ void parseDate(std::string toCheck, int field)
 				throw 1;
 			break;
 		case 1:
-			if (*end || data > 12 || data <= 0)
+			if (*end || data > 12 || data <= 0 || toCheck.size() != 2)
 				throw 1;
 			break;
 		case 2:
-			if (*end || data > 31 || data <= 0)
+			if (*end || data > 31 || data <= 0 || toCheck.size() != 2)
 				throw 1;
 			break;
 		case 3:
@@ -75,7 +75,7 @@ void parseDate(std::string toCheck, int field)
 			{
 				if (data < 0)
 					throw -1;
-				else if (data > 100)
+				else if (data > 1000)
 					throw 999;
 				throw 1;
 			}
@@ -162,6 +162,7 @@ void parseTheFile(std::string toOpen, std::map<unsigned long, double>& mydb)
 				parseLine(line, mydb);
 			}
 		}
+		obj.close();
 	}
 	else
 		throw std::runtime_error("Error: could not open file.");
