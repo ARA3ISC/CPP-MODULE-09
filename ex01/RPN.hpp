@@ -8,4 +8,4 @@
 #define SUBS 45
 #define DIV 47
 
-void startManupliationg(std::string exp);
+void startManupilating(std::string exp);

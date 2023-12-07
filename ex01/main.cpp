@@ -17,7 +17,7 @@ int main(int ac, char **av)
 	try
 	{
 		if (ac == 2)
-			startManupliationg(av[1]);
+			startManupilating(av[1]);
 		else
 			throw std::runtime_error("Error");
 	}

@@ -34,7 +34,7 @@ void calculate(std::stack<int>& myStack, char op)
 	myStack.push(result);
 }
 
-void startManupliationg(std::string exp)
+void startManupilating(std::string exp)
 {
 	int i = 0;
 	char *end;
