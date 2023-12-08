@@ -27,7 +27,11 @@ void calculate(std::stack<int>& myStack, char op)
 	else if (op == '+')
 		result = b_last + last;
 	else if (op == '/')
+	{
+		if (last == 0)
+			throw std::runtime_error("Math error: Attempted to divide by Zero");
 		result = b_last / last;
+	}
 	else if (op == '-')
 		result = b_last - last;
 
