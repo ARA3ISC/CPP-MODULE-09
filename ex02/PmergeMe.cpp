@@ -20,8 +20,9 @@ void parseArguments(char **av)
 	int i = 1;
 	while (av[i])
 	{
+		std::string arg = av[i];
 		n = std::strtol(av[i] , &end, 10);
-		if (*end || n > INT_MAX)
+		if (*end || n > INT_MAX || arg.empty())
 			throw std::invalid_argument("Error: Invalid argument");
 		else {
 			if (n < 0)

@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/12/06 17:09:41 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/12/07 16:45:06 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void beginCalculation(std::string year, std::string month, std::string day, std:
 	std::string key = year + month + day;
 	double k = std::strtod(key.c_str(), &end1);
 	double v = std::strtod(value.c_str(), &end2);
-
 
 	if (mydb.find(k) != mydb.end())
 	{
