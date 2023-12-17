@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/12/17 10:12:06 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/12/17 10:37:15 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ void retrieveData(std::string line, std::string& y, std::string& m, std::string&
 bool countPipesDashes(std::string line)
 {
 	int pipes = 0;
+	int dashes = 0;
 
 	pipes = std::count(line.begin(), line.end(), '|');
-	if (pipes != 1)
+	dashes = std::count(line.begin(), line.end(), '-');
+	if (pipes != 1 || dashes != 2)
 		return true;
 	return false;
 }
