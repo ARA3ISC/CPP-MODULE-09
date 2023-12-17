@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/12/17 10:37:15 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/12/17 13:22:09 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void retrieveData(std::string line, std::string& y, std::string& m, std::string&
 	int dashes = 0;
 	int pipe = 0;
 
+	while (line[i] == 32 || line[i] == '\t')
+		i++;
 	while (line[i] && line[i] != ','&& line[i] != '|')
 	{
 		if (line[i] != '-' && dashes == 0)
@@ -49,10 +51,26 @@ bool countPipesDashes(std::string line)
 	return false;
 }
 
+int is_leap_year(std::string year, std::string month, std::string day)
+{
+	char *end;
+
+	double yr = std::strtod(year.c_str(), &end);
+	double d = std::strtod(day.c_str(), &end);
+	double m = std::strtod(month.c_str(), &end);
+	(void)m;
+	if (d < 1)
+		throw 1;
+	if (static_cast<int>(yr) % 4 == 0)
+		return 1;
+	return 0;
+}
+
 void parseDate(std::string toCheck, int field)
 {
 	char *end;
 	double data;
+
 	data = std::strtod(toCheck.c_str(), &end);
 	if (field != 3)
 		if (toCheck.find('.') != std::string::npos)
@@ -105,6 +123,33 @@ void beginCalculation(std::string year, std::string month, std::string day, std:
 	}
 }
 
+void checkDaysOfMonth(std::string month, std::string day, bool leap)
+{
+	char *end;
+
+	double m = std::strtod(month.c_str(), &end);
+	double d = std::strtod(day.c_str(), &end);
+
+	std::map<int, int> dayPerMonth;
+
+	dayPerMonth[1] = 31;
+	dayPerMonth[2] = 28;
+	dayPerMonth[3] = 31;
+	dayPerMonth[4] = 30;
+	dayPerMonth[5] = 31;
+	dayPerMonth[6] = 30;
+	dayPerMonth[7] = 31;
+	dayPerMonth[8] = 31;
+	dayPerMonth[9] = 30;
+	dayPerMonth[10] = 31;
+	dayPerMonth[11] = 30;
+	dayPerMonth[12] = 31;
+
+	if (leap)
+		dayPerMonth[2] = 29;
+	if (d > dayPerMonth[m])
+		throw 1;
+}
 
 void parseLine(std::string line, std::map<unsigned long, double>& mydb)
 {
@@ -125,6 +170,10 @@ void parseLine(std::string line, std::map<unsigned long, double>& mydb)
 			parseDate(month, 1);
 			parseDate(day, 2);
 			parseDate(value, 3);
+			if (is_leap_year(year, month, day))
+				checkDaysOfMonth( month, day, 1);
+			else
+				checkDaysOfMonth( month, day, 0);
 			beginCalculation(year, month, day, value, mydb);
 		}
 		catch(int e)
@@ -132,7 +181,12 @@ void parseLine(std::string line, std::map<unsigned long, double>& mydb)
 			if (e == -1)
 				std::cerr << RED << "Error: not a positive number." << RESET << std::endl;
 			else if (e == 1)
-				std::cerr << RED << "Error: bad input => " << RESET << line << std::endl;
+			{
+				int i = 0;
+				while (line[i] == 32 || line[i] == '\t')
+					i++;
+				std::cerr << RED << "Error: bad input => " << RESET << &line[i] << std::endl;
+			}
 			else
 				std::cerr << RED << "Error: too large number." << RESET << std::endl;
 		}
