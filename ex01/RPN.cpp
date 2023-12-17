@@ -43,7 +43,6 @@ void startManupilating(std::string exp)
 	int i = 0;
 	char *end;
 	std::stack<int> myStack;
-	std::string ops[4] = {"*", "/", "+", "-"};
 
 	while (exp[i])
 	{
@@ -54,7 +53,7 @@ void startManupilating(std::string exp)
 		}
 		if (std::isdigit(exp[i]))
 			myStack.push(static_cast<int>(std::strtod(&exp[i], &end)));
-		if ((exp[i] == '*' || exp[i] == '+' || exp[i] == '/' || exp[i] == '-') && myStack.size() == 1)
+		if ((exp[i] == '*' || exp[i] == '+' || exp[i] == '/' || exp[i] == '-') && myStack.size() < 2)
 			throw std::runtime_error("Error");
 		else if (exp[i] == '*' || exp[i] == '+' || exp[i] == '/' || exp[i] == '-')
 			calculate(myStack, exp[i]);

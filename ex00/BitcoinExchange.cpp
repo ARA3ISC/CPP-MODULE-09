@@ -6,7 +6,7 @@
 /*   By: maneddam <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/18 17:42:20 by maneddam          #+#    #+#             */
-/*   Updated: 2023/12/07 16:45:06 by maneddam         ###   ########.fr       */
+/*   Updated: 2023/12/17 10:12:06 by maneddam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ bool countPipesDashes(std::string line)
 	int pipes = 0;
 
 	pipes = std::count(line.begin(), line.end(), '|');
-	// dashes = std::count(line.begin(), line.end(), '-');
 	if (pipes != 1)
 		return true;
 	return false;
@@ -148,7 +147,10 @@ void parseTheFile(std::string toOpen, std::map<unsigned long, double>& mydb)
 	{
 		getline(obj, line);
 		while (line.empty())
-			getline(obj, line);
+		{
+			if (getline(obj, line).eof())
+				break;
+		}
 
 		if (line != "date | value")
 			throw std::runtime_error("Invalid header line");
@@ -207,10 +209,6 @@ void loadData(std::map<unsigned long, double>& mydb)
 				break;
 			insertIntoDB(mydb, line);
 		}
-		// for (std::map<unsigned long, double>::iterator it = mydb.begin(); it != mydb.end() ; ++it)
-		// {
-		// 	std::cout << it->first << "," << it->second << std::endl;
-		// }
 	}
 	else
 		throw std::runtime_error("Error: could not open file.");

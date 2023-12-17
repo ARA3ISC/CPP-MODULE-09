@@ -38,10 +38,6 @@ void load(char **av, T& container)
 		container.push_back(nbr);
 		i++;
 	}
-
-	// std::cout << "vector :\n";
-	// for (typename T::iterator it = container.begin(); it != container.end() ; it++)
-	// 	std::cout << *it << " ";
 }
 
 template<typename T>
@@ -53,7 +49,6 @@ void merge(T& leftContainer, T& rightContainer, T& container)
 	int l = 0;
 	int r = 0;
 
-	// container.clear();
 	while (l < leftsize && r < rightsize)
 	{
 		if (leftContainer[l] < rightContainer[r])
